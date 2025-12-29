@@ -1,6 +1,6 @@
 services:
   magical:
-    image: docker.io/cbos/magical
+    image: ghcr.io/cbos/magical:1.3.1
     environment:
 #     If this port is changed, target port in the port binding has to be changed as well
       - PORT=3000
