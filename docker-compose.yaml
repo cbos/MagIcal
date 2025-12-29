@@ -1,0 +1,14 @@
+services:
+  magical:
+    image: docker.io/cbos/magical
+    environment:
+#     If this port is changed, target port in the port binding has to be changed as well
+      - PORT=3000
+      - VERCEL_URL=magical.mijndomein.nl
+      - PUBLIC_KEY_FILE=/app/public.pem
+      - PRIVATE_KEY_FILE=/app/private.pem
+    volumes:
+      - ./private.pem:/app/private.pem
+      - ./public.pem:/app/public.pem
+    ports:
+      - 3000:3000
