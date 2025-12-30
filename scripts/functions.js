@@ -277,9 +277,14 @@ module.exports = async function () {
 
     this.CheckandSendMail = async function (authtoken, getemail) {
         return new Promise(async resolve => {
-        if (getemail != true) {resolve(); return;}
-        var reqstatus = await axios('https://magisterasync.fly.dev?auth=' + authtoken);
-        if (reqstatus.data = 'Working on it!') {resolve()}
+            // Disable mail feature to prevent leak of auth token
+            if(true){
+                resolve();
+                return;
+            }
+            if (getemail != true) {resolve(); return;}
+            var reqstatus = await axios('https://magisterasync.fly.dev?auth=' + authtoken);
+            if (reqstatus.data = 'Working on it!') {resolve()}
         })
     };
 
