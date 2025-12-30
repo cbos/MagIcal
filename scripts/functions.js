@@ -212,8 +212,8 @@ module.exports = async function () {
                 location: calevent.Lokatie,
                 description: desc,
                 method: 'PUBLISH',
-                status: Status
-                // url: 'https://'+mydomain+'/'
+                status: Status,
+                url: '#/magister/details?uid=' + calevent.Id + "@mgo"
             });
         });
 
@@ -243,8 +243,8 @@ module.exports = async function () {
                         allDay: true,
                         description: desc,
                         method: 'PUBLISH',
-                        status: 'CONFIRMED'
-                        // url: 'https://'+mydomain+'/'
+                        status: 'CONFIRMED',
+                        url: '#/magister/details?uid=' + opdracht.Id + "@mgo"
                     });
             })
         }
