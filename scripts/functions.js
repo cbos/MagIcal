@@ -173,7 +173,7 @@ module.exports = async function () {
                 .replaceAll('${LesNummer}', calevent.LesuurVan)
                 .replaceAll('${RoepNaam}', userinfo.Persoon.Roepnaam)
                 .replaceAll('${Informatie}', impinfo.replace(/\n/g, " - ").replace(/ - ([^ - ]*)$/, '$1'))
-                .replaceAll('${InformatieBeschikbaar}', inhoudBeschikbaar ? "ℹ️" : "")
+                .replaceAll('${InformatieBeschikbaar}', inhoudBeschikbaar ? "[i]" : "")
                 .replaceAll('${KlasNaam}', calevent.Omschrijving.split(" - ")[calevent.Omschrijving.split(" - ").length -1])
                 .replaceAll('${isAfgerond}', calevent.Afgerond);
 
