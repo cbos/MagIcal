@@ -170,7 +170,7 @@ module.exports = async function () {
                 .replaceAll('${Locatie}', kortlocatie)
                 .replaceAll('${Docent}', calevent.Docenten.map(u => u.Naam).join(', ').replace(/, ([^,]*)$/, ' and $1'))
                 .replaceAll('${DocentKort}', calevent.Docenten[0].Docentcode)
-                .replaceAll('${LesNummer}', element.LesuurVan ?? "")
+                .replaceAll('${LesNummer}', calevent.LesuurVan ?? "")
                 .replaceAll('${RoepNaam}', userinfo.Persoon.Roepnaam)
                 .replaceAll('${Informatie}', impinfo.replace(/\n/g, " - ").replace(/ - ([^ - ]*)$/, '$1'))
                 .replaceAll('${InformatieBeschikbaar}', inhoudBeschikbaar ? "ℹ️" : "")
