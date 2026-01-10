@@ -180,12 +180,16 @@
                 <td>${RoepNaam}</th>
                 <td>Tim</td>
               </tr>
+              <tr>
+                <td>${InformatieBeschikbaar}</th>
+                <td>ℹ️</td>
+              </tr>
             </tbody>
           </table>
-          Een voorbeeld is bijvoorbeeld: <br><code>#${LesNummer} ${Vaknaam} in ${Locatie} van ${Docent} (${DocentKort})</code> <br>wat in dit geval zou uitkomen tot: <br><code>#3 Duits in 102 van Heydrich (hyd)</code>.
+          Een voorbeeld is bijvoorbeeld: <br><code>${InformatieBeschikbaar}#${LesNummer} ${Vaknaam} in ${Locatie} van ${Docent} (${DocentKort})</code> <br>wat in dit geval zou uitkomen tot: <br><code>#3 Duits in 102 van Heydrich (hyd)</code>.
           <div class="input-group mt-2">
             <span class="input-group-text material-symbols-outlined" id="basic-addon1">edit_calendar</span>
-            <input type="text" class="form-control" id="evenementtitel" placeholder="#${LesNummer} ${Vaknaam} in ${Locatie} van ${Docent} (${DocentKort})" value="${Vaknaam}" aria-label="evenementtitel" aria-describedby="basic-addon2">
+            <input type="text" class="form-control" id="evenementtitel" placeholder="${InformatieBeschikbaar}#${LesNummer} ${Vaknaam} in ${Locatie} van ${Docent} (${DocentKort})" value="${Vaknaam}" aria-label="evenementtitel" aria-describedby="basic-addon2">
           </div>
         </div>
       </div>

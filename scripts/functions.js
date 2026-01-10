@@ -130,6 +130,7 @@ module.exports = async function () {
             var discipulusdeeplink = ''
             var algemaakteaanpassing = ''
             var reminders = [30]
+            var inhoudBeschikbaar = false
 
             //Checking if event has custom set var's 
             if (typeof calevent.Aantekening != 'undefinded' && calevent.Aantekening != "" && calevent.Aantekening != null) {
@@ -156,6 +157,7 @@ module.exports = async function () {
             if (AfrondenLink == true) { var link = 'https://'+mydomain+'/Afronden?auth=' + querys.auth + '&frontend=true&evId=' + calevent.Id } else { var link = '' }
             if (querys.ShowPersonalChanges == 'true') {aanpassinglink = '<a href="https://'+mydomain+'/Aanpassen?datum='+ new Date(calevent.Start).toISOString().slice(0, 10) +'&auth='+ querys.auth + '&frontend=true&evId=' + calevent.Id + algemaakteaanpassing + '">Aanpassen</a>'}
             if (querys.ShowDiscipulusLink == 'true') {discipulusdeeplink = '<a href="discipulus://calendar?eventId=' + calevent.Id + '&profileId='+ userinfo.Persoon.Id + '">Discipulus</a>'}
+            if (calevent.Inhoud != null) {inhoudBeschikbaar = true}
             switch (calevent.InfoType) {
                 case 2: impinfo += 'Proefwerk - '; break;
                 case 3: impinfo += 'Tentamen - '; break;
@@ -171,6 +173,7 @@ module.exports = async function () {
                 .replaceAll('${LesNummer}', calevent.LesuurVan)
                 .replaceAll('${RoepNaam}', userinfo.Persoon.Roepnaam)
                 .replaceAll('${Informatie}', impinfo.replace(/\n/g, " - ").replace(/ - ([^ - ]*)$/, '$1'))
+                .replaceAll('${InformatieBeschikbaar}', inhoudBeschikbaar ? "ℹ️" : "")
                 .replaceAll('${KlasNaam}', calevent.Omschrijving.split(" - ")[calevent.Omschrijving.split(" - ").length -1])
                 .replaceAll('${isAfgerond}', calevent.Afgerond);
 
@@ -188,6 +191,14 @@ module.exports = async function () {
                 if (calevent.Inhoud != null) { informatie = "\nInformatie:\n\n" + convert(calevent.Inhoud, { hideLinkHrefIfSameAsText: true, singleNewLineParagraphs: [{ selector: 'p', options: { leadingLineBreaks: 1, trailingLineBreaks: 1 } }]}) } else { informatie = '' };
                 var desc = impinfo + calevent.Vakken.map(u => u.Naam.charAt(0).toUpperCase() + u.Naam.slice(1)).join(', ').replace(/, ([^,]*)$/, ' and $1') + ' van ' + calevent.Docenten.map(u => u.Naam + " (" + u.Docentcode + ")").join(', ').replace(/, ([^,]*)$/, ' en $1')+ " " + locatie + informatie;
             }
+
+            const eventDetails = {
+                title: title,
+                description: desc,
+                start: new Date(calevent.Start),
+                end: new Date(calevent.Einde),
+                location: calevent.Lokatie,
+            };
 
             //Creating iCalendar file
             builder.events.push({
@@ -213,7 +224,7 @@ module.exports = async function () {
                 description: desc,
                 method: 'PUBLISH',
                 status: Status,
-                url: '#/magister/details?uid=' + calevent.Id + "@mgo"
+                url: '#/magister/details?uid=' + calevent.Id + "@mg&details=" + encodeURIComponent(btoa(JSON.stringify(eventDetails)))
             });
         });
 
@@ -227,6 +238,14 @@ module.exports = async function () {
                     }
                     //Check if user has finished the assignment
                     var desc = (opdracht.IngeleverdOp != null) ? 'Opdracht \'' + opdracht.Titel + '\' is ingeleverd op ' + (new Date(opdracht.IngeleverdOp).toLocaleString('en-NL', { timeZone: 'Europe/Amsterdam' })) + '.' + extradesc : 'Opdracht \'' + opdracht.Titel + '\' moet worden ingeleverd voor ' + (new Date(opdracht.InleverenVoor).toLocaleString('en-NL', { timeZone: 'Europe/Amsterdam' })) + '.' + extradesc
+
+                    const eventDetails = {
+                        title: 'Opdracht \'' + opdracht.Titel + '\'',
+                        description: desc,
+                        start: new Date(opdracht.InleverenVoor),
+                        end: new Date(new Date(opdracht.InleverenVoor) + (1000 * 60 * 60))
+                    };
+
                     //Add Opdrachten
                     builder.events.push({
                         start: new Date(opdracht.InleverenVoor),
@@ -244,7 +263,7 @@ module.exports = async function () {
                         description: desc,
                         method: 'PUBLISH',
                         status: 'CONFIRMED',
-                        url: '#/magister/details?uid=' + opdracht.Id + "@mgo"
+                        url: '#/magister/details?uid=' + opdracht.Id + "@mgo&details=" + encodeURIComponent(btoa(JSON.stringify(eventDetails)))
                     });
             })
         }
