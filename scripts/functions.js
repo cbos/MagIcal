@@ -173,7 +173,7 @@ module.exports = async function () {
                 .replaceAll('${LesNummer}', element.LesuurVan ?? "")
                 .replaceAll('${RoepNaam}', userinfo.Persoon.Roepnaam)
                 .replaceAll('${Informatie}', impinfo.replace(/\n/g, " - ").replace(/ - ([^ - ]*)$/, '$1'))
-                .replaceAll('${InformatieBeschikbaar}', inhoudBeschikbaar ? "[i]" : "")
+                .replaceAll('${InformatieBeschikbaar}', inhoudBeschikbaar ? "ℹ️" : "")
                 .replaceAll('${KlasNaam}', calevent.Omschrijving.split(" - ")[calevent.Omschrijving.split(" - ").length -1])
                 .replaceAll('${isAfgerond}', calevent.Afgerond);
 
@@ -193,7 +193,7 @@ module.exports = async function () {
             }
 
             const eventDetails = {
-                title: title,
+                title: encodeURIComponent(title),
                 description: desc,
                 start: new Date(calevent.Start),
                 end: new Date(calevent.Einde),
